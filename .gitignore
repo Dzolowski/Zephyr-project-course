@@ -1,0 +1,18 @@
+# build artifacts
+build/
+build*/
+
+# resources
+res/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# editor & OS
+.cache/
+.vscode/
+*.swp
+.DS_Store
+*~
