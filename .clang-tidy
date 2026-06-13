@@ -1,0 +1,94 @@
+---
+# Configure clang-tidy for this project.
+#
+# This file is based on:
+# https://github.com/googleapis/google-cloud-cpp-common/blob/4192f662349a35bdd34090c20bade14839b1bfb7/.clang-tidy
+#
+
+# Here is an explanation for why some of the checks are disabled:
+#
+#  -modernize-use-trailing-return-type: clang-tidy recommends using
+#      `auto Foo() -> std::string { return ...; }`, we think the code is less
+#      readable in this form.
+#
+#  -modernize-return-braced-init-list: We think removing typenames and using
+#      only braced-init can hurt readability.
+#
+#  -performance-move-const-arg: This warning requires the developer to
+#      know/care more about the implementation details of types/functions than
+#      should be necessary. For example, `A a; F(std::move(a));` will trigger a
+#      warning IFF `A` is a trivial type (and therefore the move is
+#      meaningless). It would also warn if `F` accepts by `const&`, which is
+#      another detail that the caller need not care about.
+#
+#  -readability-redundant-declaration: A friend declaration inside a class
+#      counts as a declaration, so if we also declare that friend outside the
+#      class in order to document it as part of the public API, that will
+#      trigger a redundant declaration warning from this check.
+#
+#  -misc-include-cleaner: A `stm32h7xx_hal.h` and `FreeRTOS.h` can't be included
+#      with that optiont turned on. Yet it's convinient to use that headers that
+#      were designed to use in that way. So we decided to sacrifice
+#      the include-what-you-use paradigm for the sake of convinience.
+#
+#  -readability-identifier-length: In our domain, there's a lot of one or two letters long
+#      variables that are commonly used and understandable, like x, y, z, dt, dx, on, etc.
+#      That makes the rule hardly maintainable.
+#
+#  -misc-const-correctness: there are too many reports about adding const to temporary
+#      values, it's a lot of noice while arguably brings little benefits
+#
+Checks: >
+  -*,
+  bugprone-*,
+  google-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -google-readability-braces-around-statements,
+  -google-runtime-references,
+  -misc-non-private-member-variables-in-classes,
+  -modernize-return-braced-init-list,
+  -performance-move-const-arg,
+  -readability-named-parameter,
+  -modernize-use-trailing-return-type,
+  -readability-braces-around-statements,
+  -readability-redundant-declaration,
+  -misc-include-cleaner,
+  -google-readability-function-size,
+  -performance-no-int-to-ptr,
+  -readability-identifier-length
+
+# Turn all the warnings from the checks above into errors.
+WarningsAsErrors: "*"
+
+# Header filters, positive one:
+#HeaderFilterRegex: '^.*(x|y/|z/).*'
+# And negative one (must go with the above one):
+ExcludeHeaderFilterRegex: '^.*(build/|deps/).*' # skip generated and vendored files
+
+CheckOptions:
+  - { key: readability-identifier-naming.NamespaceCase,                   value: lower_case }
+  - { key: readability-identifier-naming.ClassCase,                       value: CamelCase  }
+  - { key: readability-identifier-naming.StructCase,                      value: CamelCase  }
+  - { key: readability-identifier-naming.TemplateParameterCase,           value: CamelCase  }
+  - { key: readability-identifier-naming.ValueTemplateParameterCase,      value: UPPER_CASE }
+  - { key: readability-identifier-naming.FunctionCase,                    value: lower_case }
+  - { key: readability-identifier-naming.VariableCase,                    value: lower_case }
+  - { key: readability-identifier-naming.ClassMemberCase,                 value: lower_case }
+  - { key: readability-identifier-naming.ClassMemberSuffix,               value: _          }
+  - { key: readability-identifier-naming.PrivateMemberSuffix,             value: _          }
+  - { key: readability-identifier-naming.ProtectedMemberSuffix,           value: _          }
+  - { key: readability-identifier-naming.MacroDefinitionCase,             value: UPPER_CASE }
+  - { key: readability-identifier-naming.EnumConstantCase,                value: UPPER_CASE }
+  - { key: readability-identifier-naming.ConstexprVariableCase,           value: UPPER_CASE }
+  - { key: readability-identifier-naming.GlobalConstantCase,              value: UPPER_CASE }
+  - { key: readability-identifier-naming.MemberConstantCase,              value: UPPER_CASE }
+  - { key: readability-identifier-naming.StaticConstantCase,              value: UPPER_CASE }
+  - { key: readability-implicit-bool-conversion.AllowIntegerConditions,   value: true       }
+  - { key: readability-implicit-bool-conversion.AllowPointerConditions,   value: true       }
+  - { key: readability-magic-numbers.IgnorePowersOf2IntegerValues,        value: true       }
+  - { key: misc-header-include-cycle.IgnoredFilesList,                    value: FreeRTOS_.*\.h }
+  - { key: misc-const-correctness.AnalyzeValues,                          value: false      }

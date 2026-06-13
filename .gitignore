@@ -4,6 +4,7 @@ build*/
 
 # resources
 res/
+deps/
 
 # python
 .venv/
@@ -16,3 +17,6 @@ __pycache__/
 *.swp
 .DS_Store
 *~
+
+app/keys/
+app/build/

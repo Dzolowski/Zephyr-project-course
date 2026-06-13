@@ -1,0 +1,46 @@
+
+{
+    "image": "ubuntu:22.04",
+    "name": "zephyr",
+    "remoteUser": "dev",
+    "forwardPorts": [
+        8001
+    ],
+    "features": {
+        "./features/additional": {},
+        "ghcr.io/goodbyte-software/goodbyte-features/codechecker:latest": {},
+        "ghcr.io/devcontainers-community/features/llvm": {
+            "version": "20"
+        },
+        "./features/pyocd": {
+            "mcuPackages": "MCXA156"
+        },
+                "ghcr.io/goodbyte-software/goodbyte-features/jlink:latest": {
+            "version": "8.60"
+        }
+    },
+    "mounts": [
+        "source=.,target=/repo,type=bind",
+        "source=/dev,target=/dev,type=bind"
+    ],
+    "initializeCommand":"chmod +x .devcontainer/hooks/*.sh",
+    "onCreateCommand": "bash -i /repo/.devcontainer/onCreateCommand.sh",
+    "postCreateCommand": ".devcontainer/hooks/post-create.sh",
+
+    "workspaceFolder": "/repo",
+    "remoteEnv": {
+        "LC_ALL": "C"
+    },
+    "shutdownAction": "stopContainer",
+    "runArgs": [
+        "--privileged"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "llvm-vs-code-extensions.vscode-clangd",
+                "marus25.cortex-debug"
+            ]
+        }
+    }
+}

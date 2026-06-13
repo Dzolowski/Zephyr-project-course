@@ -1,0 +1,18 @@
+CompileFlags:
+  CompilationDatabase: DALI/build
+  Add:
+    # Avoid warnings from using GNU-specific `#define FOO(x, ...) BAR(x, ##__VA_ARGS__)`
+    - '-Wno-gnu-zero-variadic-macro-arguments'
+  Remove:
+    # Avoid warnings for unknown compiler arguments (from boost::sml)
+    - '-fno-diagnostics-show-caret'
+    - '-ftrack-macro-expansion*'
+
+---
+If:
+  PathMatch: .*/deps/.*
+Index:
+  Background: Skip
+Diagnostics:
+  Suppress:
+    - '*'

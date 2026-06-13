@@ -1,0 +1,6 @@
+board:
+  name: training
+  full_name: Packt training board
+  vendor: nxp
+  socs:
+  - name: mcxa156

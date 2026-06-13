@@ -1,0 +1,32 @@
+{
+    "id": "pyocd",
+    "version": "1.0.0",
+    "name": "pyocd",
+    "description": "Installs pyocd tool in a container",
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/python"
+    ],
+    "mounts": [
+        {
+            "source": "${localEnv:HOME}/.local/share/cmsis-pack-manager",
+            "target": "/home/ubuntu/.local/share/cmsis-pack-manager",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}/.cache/pip",
+            "target": "/home/ubuntu/.cache/pip",
+            "type": "bind"
+        }
+    ],
+    "containerEnv": {
+        "PATH": "${HOME}/.local/bin:${PATH}"
+    },
+    "options": {
+        "mcuPackages": {
+            "type": "string",
+            "default": "",
+            "description": "Comma-separated list of pyOCD MCU support packages to install (e.g., 'st-stm32h7,nordic-nrf52')"
+        }
+    },
+    "postCreateCommand": "/usr/local/share/devcontainer_features.d/feature-postCreate-pyocd.sh"
+}

@@ -1,0 +1,55 @@
+name: Build & Sign
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/zephyrproject-rtos/ci:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: packt-training
+
+      - name: Setup Zephyr
+        uses: zephyrproject-rtos/action-zephyr-setup@v1
+        with:
+          app-path: app
+          base-path: packt-training
+          manifest-file-name: west.yml
+          toolchains: arm-zephyr-eabi
+
+      - name: Write signing key
+        env:
+          KEY_PEM: ${{ secrets.KEYS }}
+        run: |
+          mkdir -p packt-training/app/keys
+          printf '%s' "$KEY_PEM" > packt-training/app/keys/my-key.pem
+          chmod 600 packt-training/app/keys/my-key.pem
+          # Print the key - just for the training purposes
+          cat packt-training/app/keys/my-key.pem
+
+      - name: Build (production target, signed)
+        working-directory: packt-training
+        run: |
+          west build -b training -d build/sys --sysbuild -p always app
+
+      - name: Verify signature
+        working-directory: packt-training
+        run: |
+          imgtool verify --key app/keys/my-key.pem build/sys/app/zephyr/zephyr.signed.bin
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ github.sha }}
+          path: |
+            build/sys/mcuboot/zephyr/zephyr.bin
+            build/sys/app/zephyr/zephyr.signed.bin
+          retention-days: 30

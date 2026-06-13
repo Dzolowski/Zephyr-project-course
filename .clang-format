@@ -1,0 +1,53 @@
+---
+BasedOnStyle: Microsoft
+AccessModifierOffset: -4
+AlignAfterOpenBracket: AlwaysBreak
+AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterExternBlock: false
+  AfterUnion: true
+  BeforeLambdaBody: true
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyNamespace: true
+  SplitEmptyRecord: true
+BreakBeforeTernaryOperators: false
+BreakTemplateDeclarations: true
+IndentCaseLabels: true
+IndentRequiresClause: false
+InsertBraces: true
+InsertNewlineAtEOF: true
+IntegerLiteralSeparator:
+  Binary:           0
+  BinaryMinDigits:  9
+  Decimal:          0
+  DecimalMinDigits: 5
+  Hex:              0
+  HexMinDigits:     9
+ObjCBlockIndentWidth: 4
+PenaltyBreakAssignment: 50000
+PenaltyBreakBeforeFirstCallParameter: 0
+PenaltyBreakComment: 200
+PenaltyBreakFirstLessLess: 20000
+PenaltyBreakString: 200
+PenaltyExcessCharacter: 1000
+PenaltyReturnTypeOnItsOwnLine: 100000
+PointerAlignment: Left
+ReflowComments: false
+SortIncludes: false
+---
+Language: Cpp
+# Inherits config from the top
+---
+Language: C
+# C files in the project are auto-generated
+---
+Language: Proto
+# Inherits config from the top
+...
